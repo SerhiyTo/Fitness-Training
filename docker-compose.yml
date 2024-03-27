@@ -1,0 +1,20 @@
+version: '3.11'
+
+services:
+  db:
+    image: postgres:latest
+    env_file:
+    - .env
+
+  web:
+    build:
+      context: .
+    command: bash -c "poetry install && poetry run python manage.py migrate && poetry run python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8002:8000"
+    depends_on:
+      - db
+    env_file:
+      - .env

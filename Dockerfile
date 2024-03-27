@@ -1,5 +1,7 @@
 FROM python:3.11.4
 
+ENV PYTHONUNBUFFERED 1
+
 # Create and set the working directory
 WORKDIR /usr/src/app
 
