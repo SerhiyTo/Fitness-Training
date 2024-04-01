@@ -4,13 +4,13 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Profile(AbstractUser):
-    phone = models.CharField(max_length=20, verbose_name=_("user__phone"), null=True)
-    birth_date = models.DateField(verbose_name=_("user__birth_date"), null=True)
+    phone = models.CharField(max_length=20, null=True, verbose_name=_("User phone"))
+    birth_date = models.DateField(null=True, verbose_name=_("User birthdate"))
 
 
 class UserProfile(Profile):
-    height = models.FloatField(verbose_name=_("user__height"))
-    weight = models.FloatField(verbose_name=_("user__weight"))
+    height = models.FloatField(verbose_name=_("User height"))
+    weight = models.FloatField(verbose_name=_("User weight"))
 
     class Meta:
         verbose_name = _("User Profile")
@@ -21,14 +21,10 @@ class UserProfile(Profile):
 
 
 class CoachProfile(Profile):
-    experience = models.IntegerField(verbose_name=_("coach__experience"))
-    rating = models.FloatField(verbose_name=_("coach__rating"))
-    price = models.DecimalField(
-        max_digits=10, decimal_places=2, verbose_name=_("coach__price")
-    )
-    specialization = models.CharField(
-        max_length=100, verbose_name=_("coach__specialization")
-    )
+    experience = models.IntegerField(verbose_name=_("Coach experience"))
+    rating = models.FloatField(verbose_name=_("Coach rating"))
+    price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Coach price"))
+    specialization = models.CharField(max_length=100, verbose_name=_("Coach specialization"))
 
     class Meta:
         verbose_name = _("Coach Profile")
