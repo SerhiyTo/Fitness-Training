@@ -4,8 +4,16 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Profile(AbstractUser):
+    email = models.EmailField(unique=True, verbose_name=_("User email"))
     phone = models.CharField(max_length=20, null=True, verbose_name=_("User phone"))
     birth_date = models.DateField(null=True, verbose_name=_("User birthdate"))
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        verbose_name = _("Profile")
+        verbose_name_plural = _("Profiles")
 
 
 class UserProfile(Profile):

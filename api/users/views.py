@@ -2,24 +2,27 @@ from rest_framework import permissions, generics
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.users.models import UserProfile, CoachProfile
-from api.users.serializers import CoachProfileSerializer, UserProfileObtainPairToken, UserProfileSerializer
+from api.users.serializers import BaseTokenObtainPairSerializer, UserProfileSerializer, CoachProfileSerializer
 
 
-class UserProfileObtainToken(TokenObtainPairView):
+class BaserProfileObtainToken(TokenObtainPairView):
     permission_classes = [permissions.AllowAny]
-    serializer_class = UserProfileObtainPairToken
+    serializer_class = BaseTokenObtainPairSerializer
 
 
-class CoachProfileObtainToken(TokenObtainPairView):
+class UserRegisterView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
-    serializer_class = CoachProfileSerializer
 
+    def get_serializer_class(self):
+        profile_type = self.kwargs["profile_type"]
+        current_serializer = None
+        if profile_type == "user":
+            current_serializer = UserProfileSerializer
+        elif profile_type == "coach":
+            current_serializer = CoachProfileSerializer
+        return current_serializer
 
-class UserProfileView(generics.CreateAPIView):
-    queryset = UserProfile.objects.all()
-    serializer_class = UserProfileSerializer
-
-
-class CoachProfileView(generics.CreateAPIView):
-    queryset = CoachProfile.objects.all()
-    serializer_class = CoachProfileSerializer
+    def get_queryset(self):
+        if "height" and "weight" in self.request.data:
+            return UserProfile.objects.all()
+        return CoachProfile.objects.all()

@@ -1,59 +1,71 @@
-from api.users.base_serializers import ProfileSerializer, BaseTokenObtainPairSerializer
+from typing import Dict, Any
+
+from rest_framework import serializers
+from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 from api.users.models import UserProfile, CoachProfile
 
 
-class UserProfileObtainPairToken(BaseTokenObtainPairSerializer):
-    profile_model = UserProfile
+class BaseTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+    @classmethod
+    def get_token(cls, user: UserProfile | CoachProfile) -> Token:
+        token = super(BaseTokenObtainPairSerializer, cls).get_token(user)
+        token["email"] = user.email
+        return token
+
+    def validate(self, attrs: Dict[str, Any]) -> Dict[str, str]:
+        data = super().validate(attrs)
+        if (
+            not UserProfile.objects.filter(id=self.user.id).exists()
+            and not CoachProfile.objects.filter(id=self.user.id).exists()
+        ):
+            raise serializers.ValidationError({"user": "User does not exist"})
+        return data
 
 
-class CoachProfileObtainPairToken(BaseTokenObtainPairSerializer):
-    profile_model = CoachProfile
+class ProfileBaseSerializer(serializers.ModelSerializer):
+    password_repeat = serializers.CharField(write_only=True, required=True)
 
-
-class UserProfileSerializer(ProfileSerializer):
-    class Meta(ProfileSerializer.Meta):
-        model = UserProfile
-        fields = ProfileSerializer.Meta.fields + ["height", "weight"]
+    class Meta:
+        model = None
+        fields = [
+            "first_name",
+            "last_name",
+            "email",
+            "phone",
+            "birth_date",
+            "password",
+            "password_repeat",
+        ]
+        extra_kwargs = {
+            "password": {"write_only": True},
+        }
 
     def create(self, validated_data):
-        user = self.Meta.model.objects.create(
-            username=validated_data['email'],
-            email=validated_data['email'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
-            phone=validated_data['phone'],
-            birth_date=validated_data['birth_date'],
-            height=validated_data['height'],
-            weight=validated_data['weight'],
-        )
-        user.set_password(validated_data['password'])
+        validated_data.pop("password_repeat")
+        user = self.Meta.model.objects.create(**validated_data)
+        user.set_password(validated_data["password"])
         user.save()
         return user
 
 
-class CoachProfileSerializer(ProfileSerializer):
-    class Meta(ProfileSerializer.Meta):
+class UserProfileSerializer(ProfileBaseSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ProfileBaseSerializer.Meta.fields + [
+            "height",
+            "weight",
+        ]
+
+
+class CoachProfileSerializer(ProfileBaseSerializer):
+    class Meta:
         model = CoachProfile
-        fields = ProfileSerializer.Meta.fields + [
+        fields = ProfileBaseSerializer.Meta.fields + [
             "experience",
             "rating",
             "price",
             "specialization",
         ]
-
-    def create(self, validated_data):
-        user = self.Meta.model.objects.create(
-            username=validated_data['email'],
-            email=validated_data['email'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'],
-            phone=validated_data['phone'],
-            birth_date=validated_data['birth_date'],
-            experience=validated_data['experience'],
-            rating=validated_data['rating'],
-            price=validated_data['price'],
-            specialization=validated_data['specialization'],
-        )
-        user.set_password(validated_data['password'])
-        user.save()
-        return user

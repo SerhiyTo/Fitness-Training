@@ -16,7 +16,6 @@ djangorestframework-simplejwt = "^5.3.1"
 [tool.black]
 target-version = ['py310']
 line-length = 120
-skip-string-normalization = true
 exclude = '''
 (
     | .+/migrations

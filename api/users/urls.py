@@ -1,10 +1,8 @@
 from django.urls import path
 
-from api.users.views import UserProfileObtainToken, CoachProfileObtainToken, UserProfileView, CoachProfileView
+from api.users.views import BaserProfileObtainToken, UserRegisterView
 
 urlpatterns = [
-    path("token/user/", UserProfileObtainToken.as_view(), name="user_login"),
-    path("token/coach/", CoachProfileObtainToken.as_view(), name="coach_login"),
-    path("register/user/", UserProfileView.as_view(), name="user_registration"),
-    path("register/coach/", CoachProfileView.as_view(), name="coach_registration"),
+    path("token/", BaserProfileObtainToken.as_view(), name="user_login"),
+    path("register/<str:profile_type>/", UserRegisterView.as_view(), name="user_registration"),
 ]
