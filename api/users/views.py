@@ -14,7 +14,7 @@ class UserRegisterView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get_serializer_class(self):
-        profile_type = self.request.query_params.get('profile_type')
+        profile_type = self.request.data.get('profile_type')
         current_serializer = None
         if profile_type == "user":
             current_serializer = UserProfileSerializer

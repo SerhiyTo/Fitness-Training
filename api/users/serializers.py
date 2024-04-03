@@ -44,8 +44,9 @@ class ProfileBaseSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
+        email = validated_data.get("email")
         validated_data.pop("password_repeat")
-        user = self.Meta.model.objects.create(**validated_data)
+        user = self.Meta.model.objects.create(username=email, **validated_data)
         user.set_password(validated_data["password"])
         user.save()
         return user
