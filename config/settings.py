@@ -45,6 +45,7 @@ INSTALLED_APPS = [
 
     "rest_framework",
     "rest_framework_simplejwt",
+    "drf_yasg",
 
     "api.users.apps.UsersConfig",
     "api.subscription.apps.SubscriptionConfig",

@@ -26,6 +26,7 @@ class BaseTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class ProfileBaseSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True)
     password_repeat = serializers.CharField(write_only=True, required=True)
 
     class Meta:
@@ -39,9 +40,6 @@ class ProfileBaseSerializer(serializers.ModelSerializer):
             "password",
             "password_repeat",
         ]
-        extra_kwargs = {
-            "password": {"write_only": True},
-        }
 
     def create(self, validated_data):
         email = validated_data.get("email")

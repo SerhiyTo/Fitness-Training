@@ -26,3 +26,9 @@ class UserRegisterView(generics.CreateAPIView):
         if "height" and "weight" in self.request.data:
             return UserProfile.objects.all()
         return CoachProfile.objects.all()
+
+
+class CoachListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = CoachProfileSerializer
+    queryset = CoachProfile.objects.all()
