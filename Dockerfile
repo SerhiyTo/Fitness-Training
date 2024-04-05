@@ -6,7 +6,7 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /usr/src/app
 
 # Copy project files into the container
-COPY pyproject.toml poetry.lock /usr/src/app/
+COPY pyproject.toml /usr/src/app/
 
 # Install Poetry
 RUN pip install poetry
