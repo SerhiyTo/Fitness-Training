@@ -28,11 +28,19 @@ class UserProfile(Profile):
         return f"{self.last_name} {self.first_name}"
 
 
+class CoachActiveManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(is_active=True)
+
+
 class CoachProfile(Profile):
     experience = models.IntegerField(verbose_name=_("Coach experience"))
     rating = models.FloatField(verbose_name=_("Coach rating"))
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name=_("Coach price"))
     specialization = models.CharField(max_length=100, verbose_name=_("Coach specialization"))
+
+    objects = models.Manager()
+    active = CoachActiveManager()
 
     class Meta:
         verbose_name = _("Coach Profile")
