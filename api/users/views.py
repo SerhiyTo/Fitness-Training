@@ -3,7 +3,6 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.users.models import UserProfile, CoachProfile
 from api.users.serializers import BaseTokenObtainPairSerializer, UserProfileSerializer, CoachProfileSerializer
-from api.users.utils import query_params_to_dict
 
 
 class BaserProfileObtainToken(TokenObtainPairView):
@@ -35,6 +34,6 @@ class CoachListView(generics.ListAPIView):
 
     def get_queryset(self):
         if self.request.query_params:
-            filter_params = query_params_to_dict(self.request.query_params)
+            filter_params = self.request.query_params.dict()
             return CoachProfile.objects.filter(**filter_params)
         return CoachProfile.active.all()
