@@ -2,7 +2,12 @@ from rest_framework import permissions, generics
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.users.models import UserProfile, CoachProfile
-from api.users.serializers import BaseTokenObtainPairSerializer, UserProfileSerializer, CoachProfileSerializer
+from api.users.serializers import (
+    BaseTokenObtainPairSerializer,
+    UserProfileSerializer,
+    CoachProfileSerializer,
+    ProfileBaseSerializer,
+)
 
 
 class BaserProfileObtainToken(TokenObtainPairView):
@@ -14,8 +19,8 @@ class UserRegisterView(generics.CreateAPIView):
     permission_classes = [permissions.AllowAny]
 
     def get_serializer_class(self):
-        profile_type = self.request.data.get('profile_type')
-        current_serializer = None
+        profile_type = self.request.data.get("profile_type")
+        current_serializer = ProfileBaseSerializer
         if profile_type == "user":
             current_serializer = UserProfileSerializer
         elif profile_type == "coach":

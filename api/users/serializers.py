@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from api.users.models import UserProfile, CoachProfile
+from api.users.models import UserProfile, CoachProfile, Profile
 
 
 class BaseTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -30,7 +30,7 @@ class ProfileBaseSerializer(serializers.ModelSerializer):
     password_repeat = serializers.CharField(write_only=True, required=True)
 
     class Meta:
-        model = None
+        model = Profile
         fields = [
             "first_name",
             "last_name",
