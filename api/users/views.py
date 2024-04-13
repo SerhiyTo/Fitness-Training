@@ -1,6 +1,9 @@
 from rest_framework import permissions, generics
+from rest_framework.pagination import PageNumberPagination
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from api.subscription.models import Subscription
+from api.subscription.serializers import SubscriptionSerializer
 from api.users.models import UserProfile, CoachProfile
 from api.users.serializers import (
     BaseTokenObtainPairSerializer,
@@ -36,9 +39,20 @@ class UserRegisterView(generics.CreateAPIView):
 class CoachListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = CoachProfileSerializer
+    pagination_class = PageNumberPagination
 
     def get_queryset(self):
         if self.request.query_params:
             filter_params = self.request.query_params.dict()
             return CoachProfile.objects.filter(**filter_params)
         return CoachProfile.active.all()
+
+
+class SubscriptionUserListView(generics.ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = SubscriptionSerializer
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        user_id = self.request.user.pk
+        return Subscription.objects.filter(user=user_id)

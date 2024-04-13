@@ -1,9 +1,12 @@
+from datetime import timedelta
 from typing import Dict, Any
 
+from django.utils import timezone
 from rest_framework import serializers
 
 from api.subscription.models import Subscription
 from api.users.models import CoachProfile, UserProfile
+from config.settings import DAYS_PER_UPDATE
 
 
 class SubscriptionSerializer(serializers.ModelSerializer):
@@ -27,7 +30,9 @@ class SubscriptionSerializer(serializers.ModelSerializer):
         if not CoachProfile.objects.filter(id=coach.id).exists():
             raise serializers.ValidationError({"coach": "Coach does not exist"})
 
-        if Subscription.objects.filter(user=user, coach=coach).exists():
+        if Subscription.active.filter(
+            user=user, coach=coach, end_date__gte=timezone.now().date() + timedelta(days=DAYS_PER_UPDATE)
+        ).exists():
             raise serializers.ValidationError({"subscription": "Subscription already exists"})
 
         return data
