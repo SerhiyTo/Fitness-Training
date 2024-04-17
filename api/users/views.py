@@ -5,8 +5,12 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from api.subscription.models import Subscription
 from api.subscription.serializers import SubscriptionSerializer
 from api.users.models import CoachProfile, UserProfile
-from api.users.serializers import (BaseTokenObtainPairSerializer, CoachProfileSerializer, ProfileBaseSerializer,
-                                   UserProfileSerializer,)
+from api.users.serializers import (
+    BaseTokenObtainPairSerializer,
+    CoachProfileSerializer,
+    ProfileBaseSerializer,
+    UserProfileSerializer,
+)
 
 
 class BaserProfileObtainToken(TokenObtainPairView):
