@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.users.models import UserProfile, CoachProfile
+from api.users.models import CoachProfile, UserProfile
 
 
 @admin.register(UserProfile)

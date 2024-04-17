@@ -1,5 +1,6 @@
 from django.contrib import admin
-from api.diet.models import UserDiet, FoodItem, PortionFood
+
+from api.diet.models import FoodItem, PortionFood, UserDiet
 
 
 @admin.register(UserDiet)

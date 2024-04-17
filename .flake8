@@ -1,0 +1,5 @@
+[flake8]
+docstring_style = sphinx
+exclude = .git, __pycache__, venv, __init__.py
+ignore = E501, W503, E203, E206
+max_line_length = 120

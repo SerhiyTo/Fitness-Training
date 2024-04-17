@@ -1,10 +1,10 @@
-from typing import Dict, Any
+from typing import Any, Dict
 
 from rest_framework import serializers
 from rest_framework.authtoken.models import Token
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from api.users.models import UserProfile, CoachProfile, Profile
+from api.users.models import CoachProfile, Profile, UserProfile
 
 
 class BaseTokenObtainPairSerializer(TokenObtainPairSerializer):
