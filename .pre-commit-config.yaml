@@ -21,3 +21,17 @@ repos:
         language: system
         types: [python]
         pass_filenames: false
+
+      - id: xenon
+        name: xenon
+        entry: xenon --max-absolute B --max-modules A --max-average A .
+        language: system
+        types: [python]
+        pass_filenames: false
+
+      - id: bandit
+        name: bandit
+        entry: bandit -r .
+        language: system
+        types: [ python ]
+        pass_filenames: false
