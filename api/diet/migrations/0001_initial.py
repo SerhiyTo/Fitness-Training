@@ -61,9 +61,7 @@ class Migration(migrations.Migration):
                 ("end_date", models.DateField(verbose_name="user_diet__end_date")),
                 (
                     "price",
-                    models.DecimalField(
-                        decimal_places=2, max_digits=10, verbose_name="user_diet__price"
-                    ),
+                    models.DecimalField(decimal_places=2, max_digits=10, verbose_name="user_diet__price"),
                 ),
                 (
                     "training",
@@ -101,9 +99,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "portion_size",
-                    models.FloatField(
-                        max_length=100, verbose_name="portion_food__portion_size"
-                    ),
+                    models.FloatField(max_length=100, verbose_name="portion_food__portion_size"),
                 ),
                 (
                     "food_item",

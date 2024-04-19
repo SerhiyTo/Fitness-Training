@@ -1,5 +1,6 @@
 from django.contrib import admin
-from api.training.models import TrainingPlan, Training, FitnessExercise
+
+from api.training.models import FitnessExercise, Training, TrainingPlan
 
 
 @admin.register(TrainingPlan)
