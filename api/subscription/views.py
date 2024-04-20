@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, status, mixins
+from rest_framework import generics, mixins, permissions, status
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
@@ -12,7 +12,7 @@ class SubscriptionView(
     mixins.UpdateModelMixin,
     mixins.RetrieveModelMixin,
     mixins.ListModelMixin,
-    generics.GenericAPIView
+    generics.GenericAPIView,
 ):
     permission_classes = [permissions.IsAuthenticated]
     serializer_class = SubscriptionSerializer

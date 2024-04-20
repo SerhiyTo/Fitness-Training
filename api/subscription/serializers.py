@@ -1,5 +1,5 @@
 from datetime import timedelta
-from typing import Dict, Any
+from typing import Any, Dict
 
 from django.utils import timezone
 from rest_framework import serializers

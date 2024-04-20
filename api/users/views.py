@@ -1,15 +1,15 @@
-from rest_framework import permissions, generics
+from rest_framework import generics, permissions
 from rest_framework.pagination import PageNumberPagination
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.subscription.models import Subscription
 from api.subscription.serializers import SubscriptionSerializer
-from api.users.models import UserProfile, CoachProfile
+from api.users.models import CoachProfile, UserProfile
 from api.users.serializers import (
     BaseTokenObtainPairSerializer,
-    UserProfileSerializer,
     CoachProfileSerializer,
     ProfileBaseSerializer,
+    UserProfileSerializer,
 )
 
 

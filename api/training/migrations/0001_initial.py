@@ -31,9 +31,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "days_of_week",
-                    models.CharField(
-                        max_length=100, verbose_name="training__days_of_week"
-                    ),
+                    models.CharField(max_length=100, verbose_name="training__days_of_week"),
                 ),
             ],
             options={
@@ -55,9 +53,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(
-                        max_length=100, verbose_name="fitness_exercise__name"
-                    ),
+                    models.CharField(max_length=100, verbose_name="fitness_exercise__name"),
                 ),
                 (
                     "description",
@@ -73,27 +69,19 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "exercise_type",
-                    models.CharField(
-                        max_length=100, verbose_name="fitness_exercise__exercise_type"
-                    ),
+                    models.CharField(max_length=100, verbose_name="fitness_exercise__exercise_type"),
                 ),
                 (
                     "difficulty",
-                    models.CharField(
-                        max_length=100, verbose_name="fitness_exercise__difficulty"
-                    ),
+                    models.CharField(max_length=100, verbose_name="fitness_exercise__difficulty"),
                 ),
                 (
                     "muscle_group",
-                    models.CharField(
-                        max_length=100, verbose_name="fitness_exercise__muscle_group"
-                    ),
+                    models.CharField(max_length=100, verbose_name="fitness_exercise__muscle_group"),
                 ),
                 (
                     "equipment",
-                    models.CharField(
-                        max_length=100, verbose_name="fitness_exercise__equipment"
-                    ),
+                    models.CharField(max_length=100, verbose_name="fitness_exercise__equipment"),
                 ),
                 (
                     "duration",
@@ -106,9 +94,7 @@ class Migration(migrations.Migration):
                 ("rating", models.FloatField(verbose_name="fitness_exercise__rating")),
                 (
                     "training",
-                    models.ManyToManyField(
-                        related_name="fitness_exercises", to="training.training"
-                    ),
+                    models.ManyToManyField(related_name="fitness_exercises", to="training.training"),
                 ),
             ],
             options={
