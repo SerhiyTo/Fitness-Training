@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from api.training.models import TrainingPlan, Training, FitnessExercise
+from api.training.models import FitnessExercise, Training, TrainingPlan
 from api.users.models import CoachProfile, UserProfile
 
 
