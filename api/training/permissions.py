@@ -1,6 +1,6 @@
 from rest_framework import permissions
 
-from api.users.models import CoachProfile
+from api.users.models import Profile
 
 
 class IsCoach(permissions.BasePermission):
@@ -9,4 +9,4 @@ class IsCoach(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
-        return CoachProfile.objects.filter(profile_ptr_id=request.user).exists()
+        return request.user.profile_type == Profile.ProfileType.COACH
