@@ -38,13 +38,23 @@ class Training(models.Model):
 
 
 class FitnessExercise(models.Model):
+    class MuscleGroups(models.TextChoices):
+        SHOULDERS = "Shoulders", _("Shoulders")
+        CHEST = "Chest", _("Chest")
+        BACK = "Back", _("Back")
+        ARMS = "Arms", _("Arms")
+        ABDOMINAL = "Abdominal", _("Abdominal")
+        LEGS = "Legs", _("Legs")
+
     name = models.CharField(max_length=100, verbose_name=_("fitness_exercise__name"))
     description = models.TextField(verbose_name=_("fitness_exercise__description"))
     video_link = models.URLField(verbose_name=_("fitness_exercise__video_link"))
     image_link = models.URLField(verbose_name=_("fitness_exercise__image_link"))
     exercise_type = models.CharField(max_length=100, verbose_name=_("fitness_exercise__exercise_type"))
     difficulty = models.CharField(max_length=100, verbose_name=_("fitness_exercise__difficulty"))
-    muscle_group = models.CharField(max_length=100, verbose_name=_("fitness_exercise__muscle_group"))
+    muscle_group = models.CharField(
+        max_length=100, choices=MuscleGroups.choices, verbose_name=_("fitness_exercise__muscle_group")
+    )
     equipment = models.CharField(max_length=100, verbose_name=_("fitness_exercise__equipment"))
     duration = models.IntegerField(verbose_name=_("fitness_exercise__duration"))
     calories = models.IntegerField(verbose_name=_("fitness_exercise__calories"))

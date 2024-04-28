@@ -39,6 +39,7 @@ class ProfileBaseSerializer(serializers.ModelSerializer):
             "birth_date",
             "password",
             "password_repeat",
+            "profile_type",
         ]
 
     def create(self, validated_data):

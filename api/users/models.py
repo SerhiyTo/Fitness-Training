@@ -4,9 +4,14 @@ from django.utils.translation import gettext_lazy as _
 
 
 class Profile(AbstractUser):
+    class ProfileType(models.TextChoices):
+        USER = "user", _("User")
+        COACH = "coach", _("Coach")
+
     email = models.EmailField(unique=True, verbose_name=_("User email"))
     phone = models.CharField(max_length=20, null=True, verbose_name=_("User phone"))
     birth_date = models.DateField(null=True, verbose_name=_("User birthdate"))
+    profile_type = models.CharField(max_length=10, choices=ProfileType.choices, verbose_name=_("Profile type"))
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -26,6 +31,10 @@ class UserProfile(Profile):
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
+
+    def save(self, *args, **kwargs):
+        self.profile_type = Profile.ProfileType.USER
+        super().save(*args, **kwargs)
 
 
 class CoachActiveManager(models.Manager):
@@ -48,3 +57,7 @@ class CoachProfile(Profile):
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
+
+    def save(self, *args, **kwargs):
+        self.profile_type = Profile.ProfileType.COACH
+        super().save(*args, **kwargs)
