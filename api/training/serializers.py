@@ -45,6 +45,8 @@ class TrainingPlanSerializer(serializers.ModelSerializer):
         ]
 
     def validate(self, attrs):
+        if attrs["start_date"] > attrs["end_date"]:
+            raise serializers.ValidationError("End date must be greater than start date")
         if not UserProfile.objects.filter(id=attrs["user"].id).exists():
             raise serializers.ValidationError({"user": "User does not exist"})
         return attrs

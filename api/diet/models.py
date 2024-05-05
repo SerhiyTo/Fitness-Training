@@ -37,7 +37,7 @@ class FoodItem(models.Model):
 
 
 class PortionFood(models.Model):
-    food_item = models.ForeignKey(FoodItem, on_delete=models.CASCADE, related_name="portions")
+    food_item = models.ManyToManyField(FoodItem, related_name="portions")
     portion_size = models.FloatField(max_length=100, verbose_name=_("portion_food__portion_size"))
     user_diet = models.ForeignKey(UserDiet, on_delete=models.CASCADE, related_name="portion_foods")
 
@@ -46,4 +46,4 @@ class PortionFood(models.Model):
         verbose_name_plural = _("Portion Foods")
 
     def __str__(self):
-        return f"{self.food_item} - {self.portion_size}"
+        return f"{self.food_item.all()} - {self.portion_size}"

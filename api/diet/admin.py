@@ -23,4 +23,4 @@ class FoodItemAdmin(admin.ModelAdmin):
 
 @admin.register(PortionFood)
 class PortionFoodAdmin(admin.ModelAdmin):
-    list_display = ["food_item", "portion_size", "user_diet"]
+    list_display = ["portion_size", "user_diet"]
