@@ -5,7 +5,7 @@ from api.diet.serializers import FoodItemSerializer, PortionFoodSerializer, User
 from api.training.permissions import IsCoach
 
 
-class BaseView(
+class CreateUpdateRetrieveView(
     mixins.CreateModelMixin,
     mixins.UpdateModelMixin,
     mixins.RetrieveModelMixin,
@@ -25,16 +25,16 @@ class BaseView(
         return self.update(request, *args, **kwargs)
 
 
-class FoodItemView(BaseView):
+class FoodItemView(CreateUpdateRetrieveView):
     serializer_class = FoodItemSerializer
     queryset = FoodItem.objects.all()
 
 
-class PortionFoodView(BaseView):
+class PortionFoodView(CreateUpdateRetrieveView):
     serializer_class = PortionFoodSerializer
     queryset = PortionFood.objects.all()
 
 
-class UserDietView(BaseView):
+class UserDietView(CreateUpdateRetrieveView):
     serializer_class = UserDietSerializer
     queryset = UserDiet.objects.all()
