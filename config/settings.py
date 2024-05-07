@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "drf_yasg",
+    "django_elasticsearch_dsl",
     "api.users.apps.UsersConfig",
     "api.subscription.apps.SubscriptionConfig",
     "api.training.apps.TrainingConfig",
@@ -183,3 +184,14 @@ SIMPLE_JWT = {
 }
 
 DAYS_PER_UPDATE = 30
+
+ELASTICSEARCH_HOST = os.getenv("ELASTICSEARCH_HOST", "localhost")
+ELASTICSEARCH_PORT = os.getenv("ELASTICSEARCH_PORT", "9200")
+ELASTICSEARCH_USER = os.getenv("ELASTICSEARCH_USER", "elastic")
+ELASTICSEARCH_PASSWORD = os.getenv("ELASTICSEARCH_PASSWORD", "changeme")
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": f"http://{ELASTICSEARCH_USER}:{ELASTICSEARCH_PASSWORD}@{ELASTICSEARCH_HOST}:{ELASTICSEARCH_PORT}",
+    },
+}
