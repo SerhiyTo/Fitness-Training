@@ -1,9 +1,11 @@
+from elasticsearch_dsl import Q
 from rest_framework import generics, permissions
 from rest_framework.pagination import PageNumberPagination
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.subscription.models import Subscription
 from api.subscription.serializers import SubscriptionSerializer
+from api.users.documents import CoachProfileDocument
 from api.users.models import CoachProfile, UserProfile
 from api.users.serializers import (
     BaseTokenObtainPairSerializer,
@@ -44,8 +46,11 @@ class CoachListView(generics.ListAPIView):
     def get_queryset(self):
         if self.request.query_params:
             filter_params = self.request.query_params.dict()
-            return CoachProfile.objects.filter(**filter_params)
-        return CoachProfile.active.all()
+            search_query = Q("match_all")
+            for key, value in filter_params.items():
+                search_query &= Q("match", **{key: value})
+            return CoachProfileDocument.search().query(search_query).to_queryset()
+        return CoachProfileDocument.search().query("match_all").to_queryset()
 
 
 class SubscriptionUserListView(generics.ListAPIView):
