@@ -1,34 +1,77 @@
 version: '3.11'
 
 services:
+  setup:
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
+    environment:
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - KIBANA_PASSWORD=${KIBANA_PASSWORD}
+    container_name: setup
+    command:
+      - bash
+      - -c
+      - |
+        echo "Waiting for Elasticsearch availability";
+        until curl -s http://elasticsearch:9200 | grep -q "missing authentication credentials"; do sleep 30; done;
+        echo "Setting kibana_system password";
+        until curl -s -X POST -u "elastic:${ELASTIC_PASSWORD}" -H "Content-Type: application/json" http://elasticsearch:9200/_security/user/kibana_system/_password -d "{\"password\":\"${KIBANA_PASSWORD}\"}" | grep -q "^{}"; do sleep 10; done;
+        echo "All done!";
+
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:8.13.1
+    image: docker.elastic.co/elasticsearch/elasticsearch:${ELASTIC_VERSION}
     container_name: elasticsearch
     environment:
       - discovery.type=single-node
+      - cluster.name=elasticsearch
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
       - xpack.security.http.ssl.enabled=false
-      - xpack.security.enabled=true
-      - ELASTIC_PASSWORD=${ELASTICSEARCH_PASSWORD}
     ports:
-      - "9200:9200"
-      - "9300:9300"
-    env_file:
-      - .env
+      - ${ELASTICSEARCH_PORT}:${ELASTICSEARCH_PORT}
 
-  db:
-    image: postgres:latest
-    env_file:
-    - .env
-
-  web:
-    build:
-      context: .
-    command: bash -c "poetry install && poetry run python manage.py migrate && poetry run python manage.py runserver 0.0.0.0:8000"
-    volumes:
-      - .:/usr/src/app
+  kibana:
+    image: docker.elastic.co/kibana/kibana:${ELASTIC_VERSION}
+    container_name: kibana
     ports:
-      - "8002:8000"
+      - ${KIBANA_PORT}:${KIBANA_PORT}
+    environment:
+      - ELASTICSEARCH_HOSTS=${ELASTICSEARCH_HOSTS}
+      - ELASTICSEARCH_USERNAME=${KIBANA_USERNAME}
+      - ELASTICSEARCH_PASSWORD=${KIBANA_PASSWORD}
+      - TELEMETRY_ENABLED=false
     depends_on:
-      - db
-    env_file:
-      - .env
+      - elasticsearch
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:${ELASTIC_VERSION}
+    container_name: logstash
+    environment:
+      - xpack.monitoring.enabled=false
+      - ELASTIC_USER=${ELASTICSEARCH_USER}
+      - ELASTIC_PASSWORD=${ELASTIC_PASSWORD}
+      - ELASTIC_HOSTS=${ELASTICSEARCH_HOSTS}
+    depends_on:
+      - elasticsearch
+    volumes:
+      - ./elk-config/logstash.conf:/usr/share/elk-config/logstash.conf
+
+#  db:
+#    image: postgres:latest
+#    ports:
+#      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+#    volumes:
+#      - .:/var/lib/postgresql/data
+#
+#  web:
+#    build:
+#      context: .
+#    command: bash -c "poetry install && poetry run python manage.py migrate && poetry run gunicorn -w 4 config.wsgi:application  --error-logfile - --bind 0.0.0.0:8000"
+#    volumes:
+#      - .:/usr/src/app
+#    ports:
+#      - "8000:8000"
+#    depends_on:
+#      - db
+#    env_file:
+#      - .env
