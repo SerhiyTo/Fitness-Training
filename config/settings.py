@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "rest_framework_simplejwt",
     "drf_yasg",
+    "django_elasticsearch_dsl",
     "api.users.apps.UsersConfig",
     "api.subscription.apps.SubscriptionConfig",
     "api.training.apps.TrainingConfig",
@@ -68,7 +69,7 @@ ROOT_URLCONF = "config.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [BASE_DIR / "templates"],
+        "DIRS": [],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -183,3 +184,40 @@ SIMPLE_JWT = {
 }
 
 DAYS_PER_UPDATE = 30
+
+ELASTICSEARCH_HOST = os.getenv("ELASTICSEARCH_HOST", "localhost")
+ELASTICSEARCH_PORT = os.getenv("ELASTICSEARCH_PORT", "9200")
+ELASTICSEARCH_USER = os.getenv("ELASTICSEARCH_USER", "elastic")
+ELASTIC_PASSWORD = os.getenv("ELASTIC_PASSWORD", "changeme")
+
+ELASTICSEARCH_DSL = {
+    "default": {
+        "hosts": f"http://{ELASTICSEARCH_USER}:{ELASTIC_PASSWORD}@{ELASTICSEARCH_HOST}:{ELASTICSEARCH_PORT}",
+    },
+}
+
+LOGSTASH_HOST = os.getenv("LOGSTASH_HOST", "localhost")
+LOGSTASH_PORT = os.getenv("LOGSTASH_PORT", "5000")
+
+LOGGING = {
+    "version": 1,
+    "handlers": {
+        "logstash": {
+            "level": "DEBUG",
+            "class": "logstash.TCPLogstashHandler",
+            "host": LOGSTASH_HOST,
+            "port": LOGSTASH_PORT,
+            "version": 1,
+            "message_type": "logstash",
+            "fqdn": False,
+            "tags": ["tag"],
+        }
+    },
+    "loggers": {
+        "django.request": {
+            "handlers": ["logstash"],
+            "level": "DEBUG",
+            "propagate": True,
+        }
+    },
+}

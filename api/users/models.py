@@ -56,7 +56,7 @@ class CoachProfile(Profile):
         verbose_name_plural = _("Coach Profiles")
 
     def __str__(self):
-        return f"{self.last_name} {self.first_name}"
+        return f"{self.first_name} {self.last_name}"
 
     def save(self, *args, **kwargs):
         self.profile_type = Profile.ProfileType.COACH
